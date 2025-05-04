@@ -61,51 +61,45 @@ class DataTransformation:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
 
-            # Step 1: Drop high-missing/unwanted columns
+            # Step 1: Dropping high-missing/unwanted columns
             cols_to_drop = ["county", "size", "posting_date"]
             train_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
             test_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
 
-            # Step 2: Drop rows with missing year or odometer
+            # Step 2: Dropping rows with missing year or odometer
             train_df.dropna(subset=["year", "odometer"], inplace=True)
             test_df.dropna(subset=["year", "odometer"], inplace=True)
 
-            # Step 3: Feature engineering - Create car_age
+            # Step 3: Feature engineering - Creating car_age
             current_year = 2025
             train_df["car_age"] = current_year - train_df["year"]
             test_df["car_age"] = current_year - test_df["year"]
             train_df.drop(columns=["year"], inplace=True)
             test_df.drop(columns=["year"], inplace=True)
 
-            # Step 4: Separate features and target
+            # Step 4: Separating features and target
             target_column = "price"
             X_train = train_df.drop(columns=[target_column])
             y_train = train_df[target_column]
             X_test = test_df.drop(columns=[target_column])
             y_test = test_df[target_column]
 
-            # ✅ Print to debug shapes
-            print("✅ X_train shape before transform:", X_train.shape)
-            print("✅ y_train shape:", y_train.shape)
-
-            # Step 5: Get preprocessor and transform data
+            # Step 5: Getting preprocessor and transforming data
             preprocessor = self.get_data_transformer_object()
             X_train_transformed = preprocessor.fit_transform(X_train)
             X_test_transformed = preprocessor.transform(X_test)
 
-            print("✅ X_train_transformed shape:", X_train_transformed.shape)
-
-            # Step 6: Combine transformed features with target
+            # Step 6: Combining transformed features with target
             train_arr = sparse.hstack([X_train_transformed, y_train.values.reshape(-1, 1)])
             test_arr = sparse.hstack([X_test_transformed, y_test.values.reshape(-1, 1)])
 
-            # Step 7: Save preprocessor
+            # Step 7: Saving preprocessor
             save_object(
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessor
             )
 
-            logging.info("✅ Data transformation completed and preprocessor saved.")
+            logging.info("Data transformation completed and preprocessor saved.")
 
             return train_arr, test_arr, self.data_transformation_config.preprocessor_obj_file_path
 

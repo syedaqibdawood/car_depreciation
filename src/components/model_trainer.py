@@ -33,8 +33,11 @@ class ModelTrainer:
             models = {
                 "Random Forest": RandomForestRegressor()
             }
+
             params = {
-                "Random Forest": {"n_estimators": [32]}
+                "Random Forest": {
+                    "n_estimators": [32]  # Use 32 or even 16 for faster training
+                }
             }
 
             logging.info("Training and evaluating models...")

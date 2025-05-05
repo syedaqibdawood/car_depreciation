@@ -14,11 +14,9 @@ from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
 
-
 @dataclass
 class DataTransformationConfig:
     preprocessor_obj_file_path = os.path.join('artifacts', 'preprocessor.pkl')
-
 
 class DataTransformation:
     def __init__(self):
@@ -30,8 +28,7 @@ class DataTransformation:
 
             numerical_features = ["odometer", "car_age"]
             categorical_features = [
-                "region", "manufacturer", "model", "condition", "cylinders",
-                "fuel", "title_status", "transmission", "drive", "type", "paint_color", "state"
+                "manufacturer", "model", "title_status"
             ]
 
             num_pipeline = Pipeline([
@@ -41,7 +38,7 @@ class DataTransformation:
 
             cat_pipeline = Pipeline([
                 ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("encoder", OneHotEncoder(handle_unknown='ignore')),
+                ("encoder", OneHotEncoder(handle_unknown='ignore', sparse_output=False)),
                 ("scaler", StandardScaler(with_mean=False))
             ])
 
@@ -61,6 +58,7 @@ class DataTransformation:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
 
+<<<<<<< HEAD
             # Step 1: Dropping high-missing/unwanted columns
             cols_to_drop = ["county", "size", "posting_date"]
             train_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
@@ -71,6 +69,22 @@ class DataTransformation:
             test_df.dropna(subset=["year", "odometer"], inplace=True)
 
             # Step 3: Feature engineering - Creating car_age
+=======
+            # Step 1: Dropping unwanted columns
+            cols_to_drop = [
+                "county", "size", "state", "paint_color", "type", 
+                "region", "condition", "cylinders", "drive", 
+                "fuel", "transmission", "posting_date"
+            ]
+            train_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
+            test_df.drop(columns=cols_to_drop, inplace=True, errors='ignore')
+
+            # Step 2: Dropping rows with missing critical values
+            train_df.dropna(subset=["year", "odometer", "model"], inplace=True)
+            test_df.dropna(subset=["year", "odometer", "model"], inplace=True)
+
+            # Step 3: Feature engineering - car_age
+>>>>>>> ba5ddb6 (Model Trainer)
             current_year = 2025
             train_df["car_age"] = current_year - train_df["year"]
             test_df["car_age"] = current_year - test_df["year"]
@@ -84,14 +98,23 @@ class DataTransformation:
             X_test = test_df.drop(columns=[target_column])
             y_test = test_df[target_column]
 
+<<<<<<< HEAD
             # Step 5: Getting preprocessor and transforming data
+=======
+            # Step 5: Transforming data
+>>>>>>> ba5ddb6 (Model Trainer)
             preprocessor = self.get_data_transformer_object()
             X_train_transformed = preprocessor.fit_transform(X_train)
             X_test_transformed = preprocessor.transform(X_test)
 
             # Step 6: Combining transformed features with target
+<<<<<<< HEAD
             train_arr = sparse.hstack([X_train_transformed, y_train.values.reshape(-1, 1)])
             test_arr = sparse.hstack([X_test_transformed, y_test.values.reshape(-1, 1)])
+=======
+            train_arr = np.c_[X_train_transformed, y_train.to_numpy()]
+            test_arr = np.c_[X_test_transformed, y_test.to_numpy()]
+>>>>>>> ba5ddb6 (Model Trainer)
 
             # Step 7: Saving preprocessor
             save_object(
@@ -100,7 +123,10 @@ class DataTransformation:
             )
 
             logging.info("Data transformation completed and preprocessor saved.")
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba5ddb6 (Model Trainer)
             return train_arr, test_arr, self.data_transformation_config.preprocessor_obj_file_path
 
         except Exception as e:

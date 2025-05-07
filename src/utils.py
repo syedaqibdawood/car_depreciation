@@ -1,8 +1,10 @@
 import os
 import sys
+import re
 
 import numpy as np 
 import pandas as pd
+import dill
 import pickle
 from sklearn.metrics import r2_score
 from sklearn.model_selection import GridSearchCV
@@ -51,3 +53,30 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,param):
 
     except Exception as e:
         raise CustomException(e, sys)
+
+def load_object(file_path):
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
+
+    except Exception as e:
+        raise CustomException(e, sys)
+
+def extract_base_model(name: str) -> str:
+    """
+    Cleans a raw vehicle model name and returns the base model only.
+    No encoding is done here — just cleaning for consistency before encoding.
+    """
+    if pd.isnull(name) or name.strip() == "":
+        return "unknown"
+
+    name = name.lower()
+    name = re.sub(r'[^a-z0-9 ]', '', name)  # removing special characters
+    name = re.sub(
+        r'\b(crew|cab|pickup|sedan|coupe|van|wagon|truck|convertible|utility|hatchback|2d|4d|4x4|fx4|awd|fwd|rwd|sr|ex|lx|le|lt|xlt|sel|slt|premium|limited|base|plus|l|gls|xle|se|xl|sport|touring|super|luxury|classic|series|class)\b',
+        '', name
+    )
+    name = re.sub(r'\s+', ' ', name).strip()
+    
+    # returning just the first word (base model)
+    return name.split()[0] if name else "unknown"

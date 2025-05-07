@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Depreciation Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .login {
+            width: 40%;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin-top: 50px;
+            background-color: #f9f9f9;
+        }
+        .form-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            text-align: center;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <h1>Car Depreciation Prediction</h1>
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+
+            <label class="form-label">Manufacturer</label>
+            <select class="form-control" name="manufacturer" required>
+                <option selected disabled value="">Select Manufacturer</option>
+                {% for m in [
+                    'gmc', 'chevrolet', 'toyota', 'ford', 'jeep', 'nissan', 'ram', 'mazda', 'cadillac',
+                    'honda', 'dodge', 'lexus', 'jaguar', 'buick', 'chrysler', 'volvo', 'audi',
+                    'infiniti', 'lincoln', 'alfa-romeo', 'subaru', 'acura', 'hyundai', 'mercedes-benz',
+                    'bmw', 'mitsubishi', 'volkswagen', 'porsche', 'kia', 'rover', 'ferrari', 'mini',
+                    'pontiac', 'fiat', 'tesla', 'saturn', 'mercury', 'harley-davidson', 'datsun',
+                    'aston-martin', 'land rover', 'morgan'
+                ] %}
+                <option value="{{ m }}">{{ m|capitalize }}</option>
+                {% endfor %}
+            </select>
+
+            <label class="form-label">Model</label>
+            <input class="form-control" type="text" name="model" required placeholder="Enter full model name (e.g., Corolla LE 4dr Sedan)">
+
+            <label class="form-label">Fuel Type</label>
+            <select class="form-control" name="fuel" required>
+                <option selected disabled value="">Select Fuel Type</option>
+                <option value="gas">Gas</option>
+                <option value="other">Other</option>
+                <option value="diesel">Diesel</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="electric">Electric</option>
+            </select>
+
+            <label class="form-label">Title Status</label>
+            <select class="form-control" name="title_status" required>
+                <option selected disabled value="">Select Title Status</option>
+                <option value="clean">Clean</option>
+                <option value="rebuilt">Rebuilt</option>
+                <option value="lien">Lien</option>
+                <option value="salvage">Salvage</option>
+                <option value="missing">Missing</option>
+                <option value="parts only">Parts Only</option>
+            </select>
+
+            <label class="form-label">Car Year</label>
+            <input class="form-control" type="number" name="year" min="1980" max="2025" required placeholder="Enter Year (e.g., 2017)">
+
+            <label class="form-label">Odometer Reading (in miles)</label>
+            <input class="form-control" type="number" name="odometer" min="0" required placeholder="e.g., 45000">
+
+            <input class="btn" type="submit" value="Predict Future Prices">
+        </form>
+
+        {% if predictions %}
+            <h2>Predicted Prices:</h2>
+            <ul>
+                {% for year, price in predictions.items() %}
+                    <li><strong>{{ year }}</strong>: ${{ price }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

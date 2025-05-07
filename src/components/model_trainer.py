@@ -31,14 +31,25 @@ class ModelTrainer:
             y_test = test_array[:, -1]
 
             models = {
-                "Random Forest": RandomForestRegressor()
+                "Random Forest": RandomForestRegressor(),
+                "XGBoost": XGBRegressor(),
+                "Linear Regression": LinearRegression()
             }
 
             params = {
                 "Random Forest": {
-                    "n_estimators": [32]  # Use 32 or even 16 for faster training
-                }
+                    "n_estimators": [10, 20],  # very low for quick training
+                    "max_depth": [3, 5]
+                },
+                "XGBoost": {
+                    "n_estimators": [10],      # minimal trees
+                    "learning_rate": [0.1],    # default learning
+                    "max_depth": [3]           # shallow trees
+                },
+                "Linear Regression": {
+                # no hyperparameters needed for basic LinearRegression
             }
+}
 
             logging.info("Training and evaluating models...")
             model_report = evaluate_models(X_train, y_train, X_test, y_test, models, params)

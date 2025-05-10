@@ -1,1 +1,37 @@
-<h1>Welcome to Car Price Prediction Application</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Price Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .start-button {
+            margin-top: 40px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .start-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Car Price Prediction Application</h1>
+    <p>Predict the value of your used car over the next few years.</p>
+    <form action="/predictdata">
+        <button class="start-button" type="submit">Start Prediction</button>
+    </form>
+</body>
+</html>

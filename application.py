@@ -1,9 +1,11 @@
+import sys
 from flask import Flask, request, render_template
 import numpy as np
 import pandas as pd
 
 from sklearn.preprocessing import StandardScaler
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+from src.exception import CustomException
 
 application = Flask(__name__)
 app = application
@@ -18,13 +20,17 @@ def predict_datapoint():
         return render_template('home.html')
     else:
         try:
-            # Collecting form data
+            # Collecting form data from HTML
             manufacturer = request.form.get('manufacturer')
             model = request.form.get('model')
             title_status = request.form.get('title_status')
             fuel = request.form.get('fuel') 
             year = int(request.form.get('year'))
             odometer = float(request.form.get('odometer'))
+            condition = request.form.get('condition')
+            cylinders = request.form.get('cylinders')
+            car_type = request.form.get('type')
+            transmission = request.form.get('transmission')
 
             # Packaging input into CustomData
             input_data = CustomData(
@@ -33,7 +39,11 @@ def predict_datapoint():
                 title_status=title_status,
                 fuel=fuel, 
                 year=year,
-                odometer=odometer
+                odometer=odometer,
+                condition=condition,
+                cylinders=cylinders,
+                type=car_type,
+                transmission=transmission
             )
 
             # Predicting using PredictPipeline
@@ -50,7 +60,7 @@ def predict_datapoint():
             return render_template('home.html', predictions=predictions)
 
         except Exception as e:
-            raise CustomException
+            raise CustomException(e, sys)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)

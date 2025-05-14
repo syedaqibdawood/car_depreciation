@@ -1,5 +1,6 @@
-import sys
 import os
+import sys
+import numpy as np
 import pandas as pd
 from dataclasses import dataclass
 from src.utils import load_object, extract_base_model
@@ -13,10 +14,13 @@ class CustomData:
     fuel: str 
     year: int
     odometer: float
+    condition: str
+    cylinders: str
+    type: str
+    transmission: str
 
     def get_data_as_data_frame(self, car_age, updated_odometer):
         try:
-            # Cleaning model value
             cleaned_model = extract_base_model(self.model)
 
             custom_data_input_dict = {
@@ -25,19 +29,22 @@ class CustomData:
                 "title_status": [self.title_status],
                 "fuel": [self.fuel], 
                 "car_age": [car_age],
-                "odometer": [updated_odometer]
+                "odometer": [updated_odometer],
+                "condition": [self.condition],
+                "cylinders": [self.cylinders],
+                "type": [self.type],
+                "transmission": [self.transmission],
             }
             return pd.DataFrame(custom_data_input_dict)
 
         except Exception as e:
             raise CustomException(e, sys)
 
-
 class PredictPipeline:
     def __init__(self):
         self.model_path = os.path.join("artifacts", "model.pkl")
         self.preprocessor_path = os.path.join("artifacts", "preprocessor.pkl")
-        self.future_years = 4  # Predicting Price for 2025 to 2028
+        self.future_years = 4
 
     def predict(self, data: CustomData):
         try:
@@ -50,11 +57,10 @@ class PredictPipeline:
             current_age = base_year - data.year
             current_odometer = data.odometer
 
-            # Estimating miles per year
             if current_age > 0:
                 avg_miles_per_year = current_odometer / current_age
             else:
-                avg_miles_per_year = 12000  # fallback for new cars
+                avg_miles_per_year = 12000
 
             results = []
 
@@ -69,8 +75,9 @@ class PredictPipeline:
 
                 print(f"\n Predicting for year {base_year + i} | Age: {car_age} | Odo: {odometer_future}")
                 input_scaled = preprocessor.transform(input_df)
-                prediction = model.predict(input_scaled)[0]
-                results.append(round(prediction, 2))
+                log_prediction = model.predict(input_scaled)[0]
+                prediction = round(np.expm1(log_prediction), 2)  # Inversing of log1p
+                results.append(prediction)
 
             return results
 

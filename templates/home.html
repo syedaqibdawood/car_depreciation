@@ -52,15 +52,13 @@
             <label class="form-label">Manufacturer</label>
             <select class="form-control" name="manufacturer" required>
                 <option selected disabled value="">Select Manufacturer</option>
-                {% for m in [
-                    'gmc', 'chevrolet', 'toyota', 'ford', 'jeep', 'nissan', 'ram', 'mazda', 'cadillac',
-                    'honda', 'dodge', 'lexus', 'jaguar', 'buick', 'chrysler', 'volvo', 'audi',
-                    'infiniti', 'lincoln', 'alfa-romeo', 'subaru', 'acura', 'hyundai', 'mercedes-benz',
-                    'bmw', 'mitsubishi', 'volkswagen', 'porsche', 'kia', 'rover', 'ferrari', 'mini',
-                    'pontiac', 'fiat', 'tesla', 'saturn', 'mercury', 'harley-davidson', 'datsun',
-                    'aston-martin', 'land rover', 'morgan'
-                ] %}
-                <option value="{{ m }}">{{ m|capitalize }}</option>
+                {% for m in ['gmc', 'chevrolet', 'toyota', 'ford', 'jeep', 'nissan', 'ram', 'mazda', 'cadillac',
+                             'honda', 'dodge', 'lexus', 'jaguar', 'buick', 'chrysler', 'volvo', 'audi',
+                             'infiniti', 'lincoln', 'alfa-romeo', 'subaru', 'acura', 'hyundai', 'mercedes-benz',
+                             'bmw', 'mitsubishi', 'volkswagen', 'porsche', 'kia', 'rover', 'ferrari', 'mini',
+                             'pontiac', 'fiat', 'tesla', 'saturn', 'mercury', 'harley-davidson', 'datsun',
+                             'aston-martin', 'land rover', 'morgan'] %}
+                    <option value="{{ m }}">{{ m|capitalize }}</option>
                 {% endfor %}
             </select>
 
@@ -86,6 +84,56 @@
                 <option value="salvage">Salvage</option>
                 <option value="missing">Missing</option>
                 <option value="parts only">Parts Only</option>
+            </select>
+
+            <label class="form-label">Condition</label>
+            <select class="form-control" name="condition" required>
+                <option selected disabled value="">Select Condition</option>
+                <option value="good">Good</option>
+                <option value="excellent">Excellent</option>
+                <option value="fair">Fair</option>
+                <option value="like new">Like New</option>
+                <option value="new">New</option>
+                <option value="salvage">Salvage</option>
+            </select>
+
+            <label class="form-label">Cylinders</label>
+            <select class="form-control" name="cylinders" required>
+                <option selected disabled value="">Select Cylinders</option>
+                <option value="8 cylinders">8 cylinders</option>
+                <option value="6 cylinders">6 cylinders</option>
+                <option value="4 cylinders">4 cylinders</option>
+                <option value="5 cylinders">5 cylinders</option>
+                <option value="other">Other</option>
+                <option value="3 cylinders">3 cylinders</option>
+                <option value="10 cylinders">10 cylinders</option>
+                <option value="12 cylinders">12 cylinders</option>
+            </select>
+
+            <label class="form-label">Type</label>
+            <select class="form-control" name="type" required>
+                <option selected disabled value="">Select Type</option>
+                <option value="pickup">Pickup</option>
+                <option value="truck">Truck</option>
+                <option value="other">Other</option>
+                <option value="coupe">Coupe</option>
+                <option value="SUV">SUV</option>
+                <option value="hatchback">Hatchback</option>
+                <option value="mini-van">Mini-Van</option>
+                <option value="sedan">Sedan</option>
+                <option value="offroad">Offroad</option>
+                <option value="bus">Bus</option>
+                <option value="van">Van</option>
+                <option value="convertible">Convertible</option>
+                <option value="wagon">Wagon</option>
+            </select>
+
+            <label class="form-label">Transmission</label>
+            <select class="form-control" name="transmission" required>
+                <option selected disabled value="">Select Transmission</option>
+                <option value="other">Other</option>
+                <option value="automatic">Automatic</option>
+                <option value="manual">Manual</option>
             </select>
 
             <label class="form-label">Car Year</label>

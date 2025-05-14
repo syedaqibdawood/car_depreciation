@@ -4,14 +4,14 @@ from dataclasses import dataclass
 
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, AdaBoostRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 from xgboost import XGBRegressor
 from catboost import CatBoostRegressor
 from sklearn.metrics import r2_score
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object, evaluate_models  # You must define evaluate_models in utils
+from src.utils import save_object, evaluate_models
 
 @dataclass
 class ModelTrainerConfig:
@@ -23,7 +23,7 @@ class ModelTrainer:
 
     def initiate_model_trainer(self, train_array, test_array):
         try:
-            logging.info("Splitting features and target from arrays...")
+            logging.info("Splitting train/test features and target...")
             X_train = train_array[:, :-1]
             y_train = train_array[:, -1]
 
@@ -31,37 +31,21 @@ class ModelTrainer:
             y_test = test_array[:, -1]
 
             models = {
-                "Random Forest": RandomForestRegressor(),
-                "XGBoost": XGBRegressor(),
-                "Linear Regression": LinearRegression()
+                "Linear Regression": LinearRegression(),
+                
             }
 
             params = {
-                "Random Forest": {
-                    "n_estimators": [10, 20],  # very low for quick training
-                    "max_depth": [3, 5]
-                },
-                "XGBoost": {
-                    "n_estimators": [10],      # minimal trees
-                    "learning_rate": [0.1],    # default learning
-                    "max_depth": [3]           # shallow trees
-                },
-                "Linear Regression": {
-                # no hyperparameters needed for basic LinearRegression
+                "Linear Regression": {},
             }
-}
 
-            logging.info("Training and evaluating models...")
             model_report = evaluate_models(X_train, y_train, X_test, y_test, models, params)
 
             best_model_score = max(model_report.values())
             best_model_name = list(model_report.keys())[list(model_report.values()).index(best_model_score)]
             best_model = models[best_model_name]
 
-            # if best_model_score < 0.6:
-            #     raise CustomException("No good model found (r2 < 0.6)")
-
-            logging.info(f"Best model found: {best_model_name} with score {best_model_score}")
+            logging.info(f"Best model: {best_model_name} with R2: {best_model_score:.4f}")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,

@@ -77,7 +77,7 @@ class PredictPipeline:
                 input_scaled = preprocessor.transform(input_df)
                 log_prediction = model.predict(input_scaled)[0]
                 prediction = round(np.expm1(log_prediction), 2)  # Inversing of log1p
-                results.append(prediction)
+                results.append(float(prediction))
 
             return results
 

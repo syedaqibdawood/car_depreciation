@@ -93,7 +93,7 @@ class DataTransformation:
             train_df.drop(columns=["year"], inplace=True)
             test_df.drop(columns=["year"], inplace=True)
 
-            # Modelling column cleaning
+            # Model column cleaning
             train_df["model"] = train_df["model"].apply(extract_base_model)
             test_df["model"] = test_df["model"].apply(extract_base_model)
 

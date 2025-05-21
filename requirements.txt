@@ -4,5 +4,6 @@ scikit-learn
 Flask
 gunicorn
 dill
+joblib
 
 #-e .

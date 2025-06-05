@@ -51,96 +51,73 @@
 
             <label class="form-label">Manufacturer</label>
             <select class="form-control" name="manufacturer" required>
-                <option selected disabled value="">Select Manufacturer</option>
+                <option disabled value="">Select Manufacturer</option>
                 {% for m in ['gmc', 'chevrolet', 'toyota', 'ford', 'jeep', 'nissan', 'ram', 'mazda', 'cadillac',
                              'honda', 'dodge', 'lexus', 'jaguar', 'buick', 'chrysler', 'volvo', 'audi',
                              'infiniti', 'lincoln', 'alfa-romeo', 'subaru', 'acura', 'hyundai', 'mercedes-benz',
                              'bmw', 'mitsubishi', 'volkswagen', 'porsche', 'kia', 'rover', 'ferrari', 'mini',
                              'pontiac', 'fiat', 'tesla', 'saturn', 'mercury', 'harley-davidson', 'datsun',
                              'aston-martin', 'land rover', 'morgan'] %}
-                    <option value="{{ m }}">{{ m|capitalize }}</option>
+                    <option value="{{ m }}" {% if form_values and form_values.manufacturer == m %}selected{% endif %}>{{ m|capitalize }}</option>
                 {% endfor %}
             </select>
 
             <label class="form-label">Model</label>
-            <input class="form-control" type="text" name="model" required placeholder="Enter full model name (e.g., Corolla LE 4dr Sedan)">
+            <input class="form-control" type="text" name="model" required placeholder="Enter full model name (e.g., Corolla LE 4dr Sedan)" value="{{ form_values.model if form_values else '' }}">
 
             <label class="form-label">Fuel Type</label>
             <select class="form-control" name="fuel" required>
-                <option selected disabled value="">Select Fuel Type</option>
-                <option value="gas">Gas</option>
-                <option value="other">Other</option>
-                <option value="diesel">Diesel</option>
-                <option value="hybrid">Hybrid</option>
-                <option value="electric">Electric</option>
+                <option disabled value="">Select Fuel Type</option>
+                {% for f in ['gas', 'other', 'diesel', 'hybrid', 'electric'] %}
+                    <option value="{{ f }}" {% if form_values and form_values.fuel == f %}selected{% endif %}>{{ f|capitalize }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Title Status</label>
             <select class="form-control" name="title_status" required>
-                <option selected disabled value="">Select Title Status</option>
-                <option value="clean">Clean</option>
-                <option value="rebuilt">Rebuilt</option>
-                <option value="lien">Lien</option>
-                <option value="salvage">Salvage</option>
-                <option value="missing">Missing</option>
-                <option value="parts only">Parts Only</option>
+                <option disabled value="">Select Title Status</option>
+                {% for status in ['clean', 'rebuilt', 'lien', 'salvage', 'missing', 'parts only'] %}
+                    <option value="{{ status }}" {% if form_values and form_values.title_status == status %}selected{% endif %}>{{ status|capitalize }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Condition</label>
             <select class="form-control" name="condition" required>
-                <option selected disabled value="">Select Condition</option>
-                <option value="good">Good</option>
-                <option value="excellent">Excellent</option>
-                <option value="fair">Fair</option>
-                <option value="like new">Like New</option>
-                <option value="new">New</option>
-                <option value="salvage">Salvage</option>
+                <option disabled value="">Select Condition</option>
+                {% for c in ['good', 'excellent', 'fair', 'like new', 'new', 'salvage'] %}
+                    <option value="{{ c }}" {% if form_values and form_values.condition == c %}selected{% endif %}>{{ c|capitalize }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Cylinders</label>
             <select class="form-control" name="cylinders" required>
-                <option selected disabled value="">Select Cylinders</option>
-                <option value="8 cylinders">8 cylinders</option>
-                <option value="6 cylinders">6 cylinders</option>
-                <option value="4 cylinders">4 cylinders</option>
-                <option value="5 cylinders">5 cylinders</option>
-                <option value="other">Other</option>
-                <option value="3 cylinders">3 cylinders</option>
-                <option value="10 cylinders">10 cylinders</option>
-                <option value="12 cylinders">12 cylinders</option>
+                <option disabled value="">Select Cylinders</option>
+                {% for cyl in ['8 cylinders', '6 cylinders', '4 cylinders', '5 cylinders', 'other', '3 cylinders', '10 cylinders', '12 cylinders'] %}
+                    <option value="{{ cyl }}" {% if form_values and form_values.cylinders == cyl %}selected{% endif %}>{{ cyl }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Type</label>
             <select class="form-control" name="type" required>
-                <option selected disabled value="">Select Type</option>
-                <option value="pickup">Pickup</option>
-                <option value="truck">Truck</option>
-                <option value="other">Other</option>
-                <option value="coupe">Coupe</option>
-                <option value="SUV">SUV</option>
-                <option value="hatchback">Hatchback</option>
-                <option value="mini-van">Mini-Van</option>
-                <option value="sedan">Sedan</option>
-                <option value="offroad">Offroad</option>
-                <option value="bus">Bus</option>
-                <option value="van">Van</option>
-                <option value="convertible">Convertible</option>
-                <option value="wagon">Wagon</option>
+                <option disabled value="">Select Type</option>
+                {% for t in ['pickup', 'truck', 'other', 'coupe', 'SUV', 'hatchback', 'mini-van', 'sedan', 'offroad', 'bus', 'van', 'convertible', 'wagon'] %}
+                    <option value="{{ t }}" {% if form_values and form_values.type == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Transmission</label>
             <select class="form-control" name="transmission" required>
-                <option selected disabled value="">Select Transmission</option>
-                <option value="other">Other</option>
-                <option value="automatic">Automatic</option>
-                <option value="manual">Manual</option>
+                <option disabled value="">Select Transmission</option>
+                {% for tr in ['other', 'automatic', 'manual'] %}
+                    <option value="{{ tr }}" {% if form_values and form_values.transmission == tr %}selected{% endif %}>{{ tr|capitalize }}</option>
+                {% endfor %}
             </select>
 
             <label class="form-label">Car Year</label>
-            <input class="form-control" type="number" name="year" min="1980" max="2025" required placeholder="Enter Year (e.g., 2017)">
+            <input class="form-control" type="number" name="year" min="1980" max="2025" required placeholder="Enter Year (e.g., 2017)" value="{{ form_values.year if form_values else '' }}">
 
             <label class="form-label">Odometer Reading (in miles)</label>
-            <input class="form-control" type="number" name="odometer" min="0" required placeholder="e.g., 45000">
+            <input class="form-control" type="number" name="odometer" min="0" required placeholder="e.g., 45000" value="{{ form_values.odometer if form_values else '' }}">
 
             <input class="btn" type="submit" value="Predict Future Prices">
         </form>

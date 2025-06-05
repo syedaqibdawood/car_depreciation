@@ -20,7 +20,7 @@ def predict_datapoint():
         return render_template('home.html')
     else:
         try:
-            # Collecting form data from HTML
+            # Collecting form data
             manufacturer = request.form.get('manufacturer')
             model = request.form.get('model')
             title_status = request.form.get('title_status')
@@ -32,7 +32,7 @@ def predict_datapoint():
             car_type = request.form.get('type')
             transmission = request.form.get('transmission')
 
-            # Packaging input into CustomData
+            # Packaging input
             input_data = CustomData(
                 manufacturer=manufacturer,
                 model=model,
@@ -46,14 +46,14 @@ def predict_datapoint():
                 transmission=transmission
             )
 
-            # Predicting using PredictPipeline
+            # Predict
             print("Sending data to prediction pipeline...")
             pipeline = PredictPipeline()
             results = pipeline.predict(input_data)
 
-            # Showing all results — price for 2025, 2026, 2027, 2028
-            future_years = [2025 + i for i in range(len(results))]
-            predictions = dict(zip(future_years, results))
+            # Only keep 2025
+            predicted_2025 = results[0] if results and len(results) > 0 else None
+            predictions = {"2025": predicted_2025}
 
             print("Prediction complete:", predictions)
 

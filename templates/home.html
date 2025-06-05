@@ -146,11 +146,13 @@
         </form>
 
         {% if predictions %}
-            <h2>Predicted Prices:</h2>
+            <h2>Predicted Price:</h2>
             <ul>
-                {% for year, price in predictions.items() %}
-                    <li><strong>{{ year }}</strong>: ${{ price }}</li>
-                {% endfor %}
+                {% if '2025' in predictions %}
+                    <li><strong>2025</strong>: ${{ predictions['2025'] }}</li>
+                {% else %}
+                    <li>No prediction available for 2025.</li>
+                {% endif %}
             </ul>
         {% endif %}
     </div>
